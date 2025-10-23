@@ -10,7 +10,7 @@ export const APP_INFO: AppInfo = {
   copyright: '',
   privacy_policy: '',
   default_language: 'en',
-  disable_session_same_site: false, // set it to true if you want to embed the chatbot in an iframe
+  disable_session_same_site: false, // set to true if embedding chatbot in iframe
 }
 
 export const isShowPrompt = false
@@ -19,9 +19,9 @@ export const API_PREFIX = '/api'
 export const LOCALE_COOKIE_NAME = 'locale'
 export const DEFAULT_VALUE_MAX_LEN = 48
 
-// ---------------------------
-// 💎 Plan Selection Section
-// ---------------------------
+// ----------------------------------
+// 💎 PLAN SYSTEM (FREE / PRO / PRO+)
+// ----------------------------------
 
 export type Plan = 'free' | 'pro' | 'pro_plus'
 
@@ -42,28 +42,33 @@ export const PLANS: Record<Plan, PlanInfo> = {
   pro: {
     name: 'Pro',
     price: '₹99/month',
-    description: '1000 daily requests + fast speed.',
+    description: '1000 daily requests + fast performance.',
     redirectUrl: 'https://esamzsubscription.mojo.page/esamz-subscription',
   },
   pro_plus: {
     name: 'Pro+',
     price: '₹199/month',
-    description: 'Unlimited requests + fastest performance.',
+    description: 'Unlimited requests + fastest speed.',
     redirectUrl: 'https://esamzsubscription.mojo.page/esamz-subscription',
   },
 }
 
 /**
- * Redirects user based on selected plan.
- * @param plan - The selected plan ('free', 'pro', or 'pro_plus')
+ * Safe redirect only when in browser.
  */
 export const redirectToPlan = (plan: Plan) => {
-  const selected = PLANS[plan]
-  if (selected) {
-    window.location.href = selected.redirectUrl
+  if (typeof window !== 'undefined') {
+    const selected = PLANS[plan]
+    if (selected) {
+      window.location.assign(selected.redirectUrl)
+    } else {
+      console.error('Invalid plan selected:', plan)
+    }
   } else {
-    console.error('Invalid plan selected')
+    console.warn('redirectToPlan() called outside browser context.')
   }
+}
+
 }
 
 
