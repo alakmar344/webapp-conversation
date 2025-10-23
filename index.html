@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSAMz - Choose Your Plan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .plans-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .plan {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .plan:hover {
+            transform: translateY(-10px);
+        }
+        
+        .plan.popular {
+            border: 3px solid #667eea;
+            transform: scale(1.05);
+        }
+        
+        .plan.popular::before {
+            content: "MOST POPULAR";
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: #667eea;
+            color: white;
+            padding: 8px 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: rotate(45deg);
+        }
+        
+        .plan.best-value {
+            border: 3px solid #ff6b6b;
+        }
+        
+        .plan.best-value::before {
+            content: "BEST VALUE";
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: #ff6b6b;
+            color: white;
+            padding: 8px 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: rotate(45deg);
+        }
+        
+        .plan-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .plan h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        
+        .price .period {
+            font-size: 1rem;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        .chats-limit {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .features {
+            list-style: none;
+            margin: 25px 0;
+            text-align: left;
+        }
+        
+        .features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .features li.disabled {
+            color: #999;
+        }
+        
+        .features li.disabled::before {
+            content: "✗";
+            color: #ff4444;
+        }
+        
+        .upgrade-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn-free {
+            background: #f5f5f5;
+            color: #666;
+            border: 2px solid #ddd;
+        }
+        
+        .btn-pro {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-pro-plus {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+        
+        .upgrade-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .current-plan {
+            background: #4CAF50 !important;
+            color: white !important;
+        }
+        
+        .user-status {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .user-status h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .user-plan {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .chat-counter {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .plans-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .plan.popular,
+            .plan.best-value {
+                transform: none;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>eSAMz Plans</h1>
+            <p>Choose the perfect plan for your AI journey</p>
+        </div>
+
+        <!-- User Current Plan Status -->
+        <div class="user-status" id="userStatus">
+            <h3>Your Current Plan</h3>
+            <div class="user-plan" id="currentPlan">Loading...</div>
+            <div class="chat-counter" id="chatCounter"></div>
+        </div>
+
+        <!-- Pricing Plans -->
+        <div class="plans-container">
+            <!-- Free Plan -->
+            <div class="plan">
+                <div class="plan-icon">🎯</div>
+                <h3>Free</h3>
+                <div class="price">₹0 <span class="period">/month</span></div>
+                <div class="chats-limit">50 chats per day</div>
+                <ul class="features">
+                    <li>50 messages per day</li>
+                    <li>Basic AI models</li>
+                    <li>Standard response speed</li>
+                    <li>Community support</li>
+                    <li class="disabled">Mobile app access</li>
+                    <li class="disabled">Advanced frameworks</li>
+                    <li class="disabled">Priority support</li>
+                    <li class="disabled">API access</li>
+                </ul>
+                <button class="upgrade-btn btn-free" id="freePlanBtn" onclick="setUserPlan('free')">
+                    Current Plan
+                </button>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="plan popular">
+                <div class="plan-icon">🚀</div>
+                <h3>Pro</h3>
+                <div class="price">₹99 <span class="period">/month</span></div>
+                <div class="chats-limit">1,000 chats per month</div>
+                <ul class="features">
+                    <li>1,000 messages per month</li>
+                    <li>Advanced AI models (GPT-4)</li>
+                    <li>Faster response times (1-2s)</li>
+                    <li>Priority email support</li>
+                    <li>Mobile app access</li>
+                    <li>Strategic thinking frameworks</li>
+                    <li class="disabled">Team collaboration</li>
+                    <li class="disabled">API access</li>
+                </ul>
+                <a href="https://esamzsubscription.mojo.page/esamz-subscription" 
+                   class="upgrade-btn btn-pro" 
+                   target="_blank"
+                   onclick="setUserPlan('pro')">
+                    Upgrade to Pro - ₹99/month
+                </a>
+            </div>
+
+            <!-- Pro+ Plan -->
+            <div class="plan best-value">
+                <div class="plan-icon">⚡</div>
+                <h3>Pro+</h3>
+                <div class="price">₹199 <span class="period">/month</span></div>
+                <div class="chats-limit">Unlimited chats</div>
+                <ul class="features">
+                    <li>Unlimited messages</li>
+                    <li>Everything in Pro</li>
+                    <li>Ultra-fast responses (&lt;1s)</li>
+                    <li>Team collaboration (up to 3 users)</li>
+                    <li>API access included</li>
+                    <li>Custom AI training</li>
+                    <li>Dedicated support</li>
+                    <li>Advanced analytics</li>
+                </ul>
+                <button class="upgrade-btn btn-pro-plus" onclick="contactForProPlus()">
+                    Get Pro+ - ₹199/month
+                </button>
+            </div>
+        </div>
+
+        <!-- Feature Comparison -->
+        <div style="background: white; padding: 40px; border-radius: 20px; margin-top: 40px;">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Plan Comparison</h2>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f8f9fa;">
+                            <th style="padding: 15px; text-align: left; border-bottom: 2px solid #667eea;">Feature</th>
+                            <th style="padding: 15px; text-align: center; border-bottom: 2px solid #ddd;">Free</th>
+                            <th style="padding: 15px; text-align: center; border-bottom: 2px solid #667eea;">Pro</th>
+                            <th style="padding: 15px; text-align: center; border-bottom: 2px solid #ff6b6b;">Pro+</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 15px; border-bottom: 1px solid #f0f0f0;">Monthly Messages</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">1,500 (50/day)</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">1,000</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 15px; border-bottom: 1px solid #f0f0f0;">Price</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">₹0</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">₹99</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">₹199</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 15px; border-bottom: 1px solid #f0f0f0;">AI Models</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">Basic</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">Advanced</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">Premium</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 15px; border-bottom: 1px solid #f0f0f0;">Response Time</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">2-5s</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">1-2s</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">&lt;1s</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 15px; border-bottom: 1px solid #f0f0f0;">Mobile App</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">❌</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">✅</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">✅</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 15px; border-bottom: 1px solid #f0f0f0;">API Access</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">❌</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">❌</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">✅</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 15px; border-bottom: 1px solid #f0f0f0;">Team Collaboration</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">❌</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">❌</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #f0f0f0;">✅ (3 users)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pricing Note -->
+        <div style="text-align: center; color: white; margin-top: 30px; opacity: 0.8;">
+            <p>💡 <strong>Pro Tip:</strong> Free plan gives 1,500 messages/month (50/day) - perfect for testing!</p>
+        </div>
+    </div>
+
+    <script>
+        // User plan management
+        function setUserPlan(plan) {
+            localStorage.setItem('userPlan', plan);
+            
+            // Reset chat counter for new plan
+            if (plan === 'pro') {
+                localStorage.setItem('proChatsUsed', '0');
+                localStorage.setItem('proPlanStart', new Date().toISOString());
+            } else if (plan === 'pro-plus') {
+                localStorage.setItem('proPlusPlanStart', new Date().toISOString());
+            }
+            
+            updateUserStatus();
+            
+            if (plan === 'pro') {
+                // Redirect to payment page
+                setTimeout(() => {
+                    window.open('https://esamzsubscription.mojo.page/esamz-subscription', '_blank');
+                }, 500);
+            } else if (plan === 'pro-plus') {
+                contactForProPlus();
+            }
+        }
+
+        function updateUserStatus() {
+            const plan = localStorage.getItem('userPlan') || 'free';
+            const planNames = {
+                'free': 'Free Plan - 50 chats/day',
+                'pro': 'Pro Plan 🚀 - 1,000 chats/month', 
+                'pro-plus': 'Pro+ Plan ⚡ - Unlimited chats'
+            };
+            
+            document.getElementById('currentPlan').textContent = planNames[plan];
+            
+            // Update chat counter
+            updateChatCounter(plan);
+            
+            // Update button states
+            document.querySelectorAll('.upgrade-btn').forEach(btn => {
+                btn.classList.remove('current-plan');
+            });
+            
+            const currentBtn = document.getElementById(plan + 'PlanBtn');
+            if (currentBtn) {
+                currentBtn.textContent = plan === 'free' ? 'Current Plan' : 'Current Plan ✅';
+                currentBtn.classList.add('current-plan');
+            }
+        }
+
+        function updateChatCounter(plan) {
+            const chatCounter = document.getElementById('chatCounter');
+            
+            if (plan === 'free') {
+                const today = new Date().toDateString();
+                const lastReset = localStorage.getItem('freeLastReset') || today;
+                let dailyChats = parseInt(localStorage.getItem('freeDailyChats') || '0');
+                
+                if (lastReset !== today) {
+                    dailyChats = 0;
+                    localStorage.setItem('freeDailyChats', '0');
+                    localStorage.setItem('freeLastReset', today);
+                }
+                
+                chatCounter.textContent = `Today: ${dailyChats}/50 chats used`;
+                
+            } else if (plan === 'pro') {
+                const planStart = localStorage.getItem('proPlanStart') || new Date().toISOString();
+                const startDate = new Date(planStart);
+                const now = new Date();
+                const daysInMonth = 30; // Simplified monthly cycle
+                
+                let chatsUsed = parseInt(localStorage.getItem('proChatsUsed') || '0');
+                const daysUsed = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+                const resetInDays = daysInMonth - daysUsed;
+                
+                chatCounter.textContent = `Monthly: ${chatsUsed}/1,000 chats used • Resets in ${resetInDays} days`;
+                
+            } else if (plan === 'pro-plus') {
+                chatCounter.textContent = 'Unlimited chats • No restrictions';
+            }
+        }
+
+        function contactForProPlus() {
+            const email = 'proman007power@gmail.com';
+            const subject = 'eSAMz Pro+ Plan - ₹199/month';
+            const body = 'Hello, I want to upgrade to eSAMz Pro+ plan (₹199/month with unlimited chats). Please provide payment details.';
+            
+            window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+            
+            // Simulate Pro+ upgrade after email
+            setTimeout(() => {
+                if (confirm('Did you send the email for Pro+ upgrade?')) {
+                    setUserPlan('pro-plus');
+                }
+            }, 1000);
+        }
+
+        // Chat tracking simulation (you'll integrate this with your actual chat system)
+        function trackChat() {
+            const plan = localStorage.getItem('userPlan') || 'free';
+            
+            if (plan === 'free') {
+                const today = new Date().toDateString();
+                const lastReset = localStorage.getItem('freeLastReset') || today;
+                let dailyChats = parseInt(localStorage.getItem('freeDailyChats') || '0');
+                
+                if (lastReset !== today) {
+                    dailyChats = 0;
+                    localStorage.setItem('freeLastReset', today);
+                }
+                
+                if (dailyChats >= 50) {
+                    alert('Daily limit reached! Upgrade to Pro for more chats.');
+                    return false;
+                }
+                
+                dailyChats++;
+                localStorage.setItem('freeDailyChats', dailyChats.toString());
+                
+            } else if (plan === 'pro') {
+                let chatsUsed = parseInt(localStorage.getItem('proChatsUsed') || '0');
+                
+                if (chatsUsed >= 1000) {
+                    alert('Monthly limit reached! Upgrade to Pro+ for unlimited chats.');
+                    return false;
+                }
+                
+                chatsUsed++;
+                localStorage.setItem('proChatsUsed', chatsUsed.toString());
+            }
+            
+            updateChatCounter(plan);
+            return true;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUserStatus();
+            
+            // Simulate chat usage for demo
+            setInterval(updateUserStatus, 60000); // Update every minute
+        });
+    </script>
+</body>
+</html>
