@@ -66,10 +66,4 @@ export const redirectToPlan = (plan: Plan) => {
     }
   } else {
     console.warn('redirectToPlan() called outside browser context.')
-  }
-}
-
-}
-
-
-
+    
