@@ -1,10 +1,17 @@
 export async function POST(req) {
-  const data = await req.json();
-  const { buyer_name, buyer_email, amount, status, purpose } = data;
+  try {
+    const data = await req.json();
+    console.log("✅ Webhook received:", data);
 
-  if (status === "Credit") {
-    console.log("✅ Payment successful:", buyer_name, buyer_email, amount, purpose);
+    // Always respond 200 to confirm to Instamojo
+    return new Response("OK", { status: 200 });
+  } catch (error) {
+    console.error("Webhook error:", error);
+    return new Response("Invalid request", { status: 400 });
   }
+}
 
-  return new Response("OK", { status: 200 });
+export async function GET() {
+  // Optional: helps you test in browser
+  return new Response("Webhook active ✅", { status: 200 });
 }
