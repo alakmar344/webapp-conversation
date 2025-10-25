@@ -6,7 +6,7 @@ export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? ''
 
 export const APP_INFO: AppInfo = {
   title: 'esamz.ai',
-  description: '',
+  description: 'esamz.ai — Dive into the unknown, emerge with insight.',
   copyright: '',
   privacy_policy: '',
   default_language: 'en',
