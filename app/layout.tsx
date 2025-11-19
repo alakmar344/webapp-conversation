@@ -1,7 +1,6 @@
-import { getLocaleOnServer } from '@/i18n/server'
-
 import './styles/globals.css'
 import './styles/markdown.scss'
+import { getLocaleOnServer } from '@/i18n/server'
 
 const LocaleLayout = async ({
   children,
