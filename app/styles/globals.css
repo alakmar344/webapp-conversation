@@ -6,59 +6,61 @@
 @source "../../node_modules/streamdown/dist/index.js";
 
 /* -------------------------------------------------
-   Root Variables
+   ChromeFlux Root Variables
 -------------------------------------------------- */
 :root {
-  --max-width: 1100px;
-  --radius: 12px;
+  --max-width: 1200px;
+  --radius: 14px;
 
   --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono",
     "Segoe UI Mono", "Roboto Mono", "Oxygen Mono",
     "Ubuntu Monospace", "Source Code Pro", "Fira Mono",
     "Droid Sans Mono", "Courier New", monospace;
 
-  /* Colors */
-  --fg: 15, 23, 42;
-  --bg-start: 248, 250, 252;
-  --bg-end: 255, 255, 255;
+  /* Colors - ChromeFlux */
+  --fg: 230, 240, 255;
+  --bg-start: 10, 14, 22;       /* deep metallic blue-black */
+  --bg-end: 4, 6, 10;           /* darker polished metal */
 
-  /* Glows */
-  --glow-primary: conic-gradient(
-    from 180deg at 50% 50%,
-    #3b82f655 0deg,
-    #2563eb55 55deg,
-    #60a5fa55 120deg,
-    #1d4ed855 160deg,
-    transparent 360deg
+  /* Metallic gradients */
+  --chrome-flux: linear-gradient(
+    135deg,
+    rgba(180, 200, 255, 0.25),
+    rgba(80, 120, 255, 0.45),
+    rgba(20, 40, 90, 0.4),
+    rgba(10, 14, 22, 0.9)
   );
 
-  --glow-secondary: radial-gradient(
-    rgba(59, 130, 246, 0.15),
-    rgba(255, 255, 255, 0)
+  --chrome-ring: conic-gradient(
+    from 0deg,
+    #9ecbff50,
+    #6ea8ff60,
+    #3a6bff40,
+    #0f1a40a0,
+    #6ea8ff60,
+    #9ecbff50
   );
 
-  /* Surfaces */
-  --tile-start: 241, 245, 249;
-  --tile-end: 248, 250, 252;
-  --tile-border: conic-gradient(
-    #3b82f680,
-    #3b82f640,
-    #3b82f630,
-    #3b82f620,
-    #3b82f610,
-    #3b82f610,
-    #3b82f680
+  /* Glass layers */
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.15);
+
+  /* Glow */
+  --flux-glow: radial-gradient(
+    rgba(80, 150, 255, 0.5),
+    rgba(0, 0, 0, 0)
   );
 
-  --callout-bg: 239, 246, 255;
-  --callout-border: 147, 197, 253;
-
-  --card-bg: 219, 234, 254;
-  --card-border: 96, 165, 250;
+  --flux-line: linear-gradient(
+    90deg,
+    rgba(0, 123, 255, 0),
+    rgba(100, 180, 255, 0.6),
+    rgba(0, 123, 255, 0)
+  );
 }
 
 /* -------------------------------------------------
-   Reset / Base
+   Base Reset
 -------------------------------------------------- */
 * {
   margin: 0;
@@ -74,65 +76,96 @@ body {
 
 body {
   color: rgb(var(--fg));
-  background: linear-gradient(
+  background:
+    linear-gradient(
       to bottom,
-      rgba(59, 130, 246, 0.03),
+      rgba(100, 150, 255, 0.07),
       rgb(var(--bg-end))
     ),
     rgb(var(--bg-start));
+  background-attachment: fixed;
 }
 
+/* -------------------------------------------------
+   Anchor
+-------------------------------------------------- */
 a {
   text-decoration: none;
   color: inherit;
 }
 
 /* -------------------------------------------------
-   Typography Utilities
+   Typography
 -------------------------------------------------- */
 .h1 {
   padding-bottom: 1.5rem;
-  line-height: 1.5;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1e40af;
+  line-height: 1.4;
+  font-size: 1.4rem;
+  font-weight: 700;
+  background: var(--flux-line);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .h2 {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 500;
-  color: #1e3a8a;
-  line-height: 1.5;
+  color: rgba(180, 200, 255, 0.85);
+  line-height: 1.4;
 }
 
 .link {
-  @apply text-blue-600 cursor-pointer hover:opacity-80 transition-opacity duration-200 ease-in-out;
+  @apply cursor-pointer transition-opacity duration-200 ease-in-out;
+  color: #7bb4ff;
+}
+.link:hover {
+  opacity: 0.7;
 }
 
 .text-gradient {
-  background: linear-gradient(91.58deg, #2563eb -29.55%, #3b82f6 75.22%);
+  background: linear-gradient(
+    90deg,
+    #7bb4ff,
+    #3b82f6,
+    #8ec5ff
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 /* -------------------------------------------------
-   Card + Tile utilities
+   ChromeFlux Surfaces
 -------------------------------------------------- */
 .card {
-  background: rgb(var(--card-bg));
-  border: 1px solid rgb(var(--card-border));
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   padding: 1rem;
+  box-shadow:
+    0 0 25px rgba(100, 150, 255, 0.25),
+    inset 0 0 10px rgba(255, 255, 255, 0.04);
 }
 
 .tile {
-  background: linear-gradient(
-    to bottom,
-    rgb(var(--tile-start)),
-    rgb(var(--tile-end))
-  );
+  background: var(--chrome-flux);
   border-radius: var(--radius);
-  border: 1px solid var(--tile-border);
   padding: 1rem;
+  border: 1px solid transparent;
+  background-origin: border-box;
+  box-shadow:
+    0 0 40px rgba(90, 150, 255, 0.25),
+    inset 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  padding: 1px;
+  background: var(--chrome-ring);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
