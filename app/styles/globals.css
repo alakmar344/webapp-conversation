@@ -169,3 +169,31 @@ a {
   -webkit-mask-composite: xor;
   mask-composite: exclude;
 }
+/* Force chatbot area to ChromeFlux background */
+.chat-container,
+.conversation-panel,
+.message-panel,
+.chat-body,
+.chat-wrapper,
+.scroll-area {
+  background: rgb(10, 14, 22) !important;
+  background: linear-gradient(
+      to bottom,
+      rgba(100, 150, 255, 0.05),
+      rgb(4, 6, 10)
+    ) !important;
+  color: rgb(230, 240, 255) !important;
+}
+.message {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: rgb(230, 240, 255) !important;
+}
+.chat-input {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+.chat-input::placeholder {
+  color: rgba(180, 200, 255, 0.4) !important;
+}
