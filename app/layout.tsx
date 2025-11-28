@@ -34,19 +34,24 @@ export const metadata = {
 };
 
 const LocaleLayout = async ({ children }: { children: React.ReactNode }) => {
-  const locale = await getLocaleOnServer();
-  
+  let locale = "en";
+
+  try {
+    locale = (await getLocaleOnServer()) ?? "en";
+  } catch {
+    // Prevent SSR from crashing → no more 500 errors
+    locale = "en";
+  }
+
   return (
-    <html lang={locale ?? 'en'} className="h-full">
+    <html lang={locale} className="h-full">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className="h-full">
-        <div className="overflow-x-auto">
-          <main className="w-screen h-screen min-w-[300px]">
-            {children}
-          </main>
-        </div>
+        <main className="overflow-x-auto w-screen h-screen min-w-[300px]">
+          {children}
+        </main>
       </body>
     </html>
   );
