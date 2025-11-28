@@ -6,24 +6,26 @@ import { match } from '@formatjs/intl-localematcher'
 import type { Locale } from '.'
 import { i18n } from '.'
 
-// The safest fallback locale
 const FALLBACK_LOCALE: Locale = i18n.defaultLocale as Locale
 
 export const getLocaleOnServer = async (): Promise<Locale> => {
   try {
-    // 1. Load available locales
     const locales: string[] = [...i18n.locales]
 
-    // 2. Try cookie first
     let languages: string[] = []
+
+    // 1. Try cookie safely
     try {
-      const localeCookie = (await cookies())?.get('locale')
+      const cookieStore = await cookies()
+      const localeCookie = cookieStore?.get('locale')
       if (localeCookie?.value) {
         languages = [localeCookie.value]
       }
-    } catch {}
+    } catch {
+      // ignore cookie errors (safe)
+    }
 
-    // 3. If no cookie, use request headers safely
+    // 2. Try headers safely if no cookie
     if (languages.length === 0) {
       try {
         const rawHeaders = await headers()
@@ -38,13 +40,15 @@ export const getLocaleOnServer = async (): Promise<Locale> => {
         const negotiator = new Negotiator({ headers: negotiatorHeaders })
         const langs = negotiator.languages()
 
-        if (langs && Array.isArray(langs) && langs.length > 0) {
+        if (Array.isArray(langs) && langs.length > 0) {
           languages = langs
         }
-      } catch {}
+      } catch {
+        // ignore header parsing errors
+      }
     }
 
-    // 4. Match locale safely
+    // 3. Match the locale safely
     try {
       return match(
         languages.length > 0 ? languages : [FALLBACK_LOCALE],
@@ -55,12 +59,6 @@ export const getLocaleOnServer = async (): Promise<Locale> => {
       return FALLBACK_LOCALE
     }
   } catch {
-    // Final fail-safe: never crash SSR
     return FALLBACK_LOCALE
   }
-}
-
-  // match locale
-  const matchedLocale = match(languages, locales, i18n.defaultLocale) as Locale
-  return matchedLocale
 }
