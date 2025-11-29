@@ -1,11 +1,12 @@
-import './styles/globals.css'
-import './styles/markdown.scss'
-import { getLocaleOnServer } from '@/i18n/server'
+import "./styles/globals.css";
+import "./styles/markdown.scss";
+import { getLocaleOnServer } from "@/i18n/server";
 import Script from "next/script";
 
 export const metadata = {
   title: "esamz.ai – Strategic Artificial Mind",
-  description: "Esamz.ai is a strategic artificial mind engineered for reasoning, precision, and intelligent decision systems.",
+  description:
+    "Esamz.ai is a strategic artificial mind engineered for reasoning, precision, and intelligent decision systems.",
   applicationName: "esamz.ai",
   generator: "Next.js",
   keywords: ["esamz", "esamz.ai", "AI", "strategic artificial mind", "Alakmar"],
@@ -19,7 +20,8 @@ export const metadata = {
   },
   openGraph: {
     title: "esamz.ai – Strategic Artificial Mind",
-    description: "Esamz.ai is a strategic artificial mind engineered by King Alakmar.",
+    description:
+      "Esamz.ai is a strategic artificial mind engineered by King Alakmar.",
     url: "https://esamz.site",
     siteName: "esamz.ai",
     locale: "en_US",
@@ -46,7 +48,7 @@ const LocaleLayout = async ({ children }: { children: React.ReactNode }) => {
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        {/* ✅ GOOGLE KNOWLEDGE GRAPH JSON-LD SCHEMA */}
+        {/* GOOGLE KNOWLEDGE GRAPH + PRODUCT + ORGANIZATION + PERSON SCHEMA */}
         <Script id="schema-esamz" type="application/ld+json">
           {`
           {
@@ -59,22 +61,28 @@ const LocaleLayout = async ({ children }: { children: React.ReactNode }) => {
                 "url": "https://esamz.site",
                 "logo": "https://esamz.site/logo.png",
                 "foundingDate": "2025-10-21",
+                "description": "eSAMz is a strategic artificial mind engineered for reasoning, clarity, and human-aligned intelligence.",
                 "founder": {
                   "@type": "Person",
                   "name": "Alakmar Teenwala",
-                  "sameAs": ["https://www.instagram.com/esamz_ai"]
+                  "sameAs": [
+                    "https://www.instagram.com/esamz_ai"
+                  ]
                 },
                 "sameAs": [
                   "https://esamz.info",
                   "https://about-esamz.vercel.app",
                   "https://www.instagram.com/esamz_ai"
-                ],
-                "description": "eSAMz is a strategic artificial mind engineered for reasoning, clarity, and human-aligned intelligence."
+                ]
               },
+
               {
                 "@type": "Product",
                 "name": "ESAMZ AI",
-                "brand": "eSAMz",
+                "brand": {
+                  "@type": "Brand",
+                  "name": "eSAMz"
+                },
                 "description": "ESAMZ AI is a human-like cognitive system engineered for warmth, precision, and strategic intelligence.",
                 "url": "https://esamz.site",
                 "logo": "https://esamz.site/logo.png",
@@ -82,21 +90,30 @@ const LocaleLayout = async ({ children }: { children: React.ReactNode }) => {
                   "https://esamz.info",
                   "https://about-esamz.vercel.app",
                   "https://www.instagram.com/esamz_ai"
-                ]
+                ],
+                "offers": {
+                  "@type": "Offer",
+                  "price": "0",
+                  "priceCurrency": "USD",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://esamz.site"
+                }
               },
+
               {
                 "@type": "Person",
                 "name": "Alakmar Teenwala",
-                "jobTitle": "Founder & Chief Architect of eSAMz",
+                "jobTitle": "Founder and Chief Architect of eSAMz",
+                "description": "Creator of the ESAMZ AI Strategic Artificial Mind.",
                 "url": "https://esamz.site",
-                "sameAs": ["https://www.instagram.com/esamz_ai"],
-                "description": "Creator of the ESAMZ AI Strategic Artificial Mind."
+                "sameAs": [
+                  "https://www.instagram.com/esamz_ai"
+                ]
               }
             ]
           }
           `}
         </Script>
-
       </head>
 
       <body className="h-full">
