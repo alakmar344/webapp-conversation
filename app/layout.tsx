@@ -48,7 +48,7 @@ const LocaleLayout = async ({ children }: { children: React.ReactNode }) => {
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        {/* GOOGLE KNOWLEDGE GRAPH + PRODUCT + ORGANIZATION + PERSON SCHEMA */}
+        {/* GOOGLE KNOWLEDGE GRAPH • ORGANIZATION • PRODUCT • PERSON */}
         <Script id="schema-esamz" type="application/ld+json">
           {`
           {
@@ -86,6 +86,7 @@ const LocaleLayout = async ({ children }: { children: React.ReactNode }) => {
                 "description": "ESAMZ AI is a human-like cognitive system engineered for warmth, precision, and strategic intelligence.",
                 "url": "https://esamz.site",
                 "logo": "https://esamz.site/logo.png",
+                "image": "https://esamz.site/og-image.png",
                 "sameAs": [
                   "https://esamz.info",
                   "https://about-esamz.vercel.app",
@@ -96,7 +97,23 @@ const LocaleLayout = async ({ children }: { children: React.ReactNode }) => {
                   "price": "0",
                   "priceCurrency": "USD",
                   "availability": "https://schema.org/InStock",
-                  "url": "https://esamz.site"
+                  "url": "https://esamz.site",
+                  "shippingDetails": {
+                    "@type": "OfferShippingDetails",
+                    "shippingRate": {
+                      "@type": "MonetaryAmount",
+                      "value": "0",
+                      "currency": "USD"
+                    },
+                    "shippingDestination": {
+                      "@type": "DefinedRegion",
+                      "name": "Worldwide"
+                    }
+                  },
+                  "hasMerchantReturnPolicy": {
+                    "@type": "MerchantReturnPolicy",
+                    "returnPolicyCategory": "https://schema.org/RefundNotApplicable"
+                  }
                 }
               },
 
@@ -126,3 +143,4 @@ const LocaleLayout = async ({ children }: { children: React.ReactNode }) => {
 };
 
 export default LocaleLayout;
+
