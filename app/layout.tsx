@@ -137,10 +137,16 @@ const LocaleLayout = async ({ children }: { children: React.ReactNode }) => {
         <main className="overflow-x-auto w-screen h-screen min-w-[300px]">
           {children}
         </main>
+
+        {/* ✅ Voice Assistant Widget */}
+        <Script
+          id="esamz-voice-widget"
+          strategy="afterInteractive"
+          src="https://omnidim.io/web_widget.js?secret_key=991cb29a57efdc6b1e1cb593212c3304"
+        />
       </body>
     </html>
   );
 };
 
 export default LocaleLayout;
-
